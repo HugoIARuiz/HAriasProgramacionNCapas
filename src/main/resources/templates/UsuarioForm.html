@@ -74,15 +74,23 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                             <div class="row">
                                 <div class="col mb-3">
                                     <label for="CurpUsuario" class="form-label fw-bold">CURP</label>
-                                    <input id="CurpUsuario" type="text" class="form-control" th:field="*{Usuario.Curp}" onkeypress="return ValidaCurp(event, this)" >
+                                    <input id="CurpUsuario" type="text" class="form-control" placeholder="(Opcional)" th:field="*{Usuario.Curp}" onkeypress="return ValidaCurp(event, this)" >
                                     <span th:if="${#fields.hasErrors('Usuario.Curp')}" th:errors="*{Usuario.Curp}" class="text-danger"></span>
                                     <span id="CurpUsuarioError" class="text-danger"></span>
                                 </div>
                                 <div class="col mb-3">
-                                    <label for="SexoUsuario" class="form-label fw-bold">Sexo</label>
-                                    <input id="SexoUsuario" type="text" class="form-control" placeholder="MS: Masculino FM: Femenino" th:field="*{Usuario.Sexo}" onkeypress="return ValidaSexo(event, this)" >
-                                    <span th:if="${#fields.hasErrors('Usuario.Sexo')}" th:errors="*{Usuario.Sexo}" class="text-danger"></span>
-                                    <span id="SexoUsuarioError" class="text-danger"></span>
+                                    <div class="row">
+                                        <label for="SexoUsuario" class=" form-label fw-bold">Sexo</label>
+                                        <div class="col radio">
+                                            <label><input type="radio" name="SexoUsuario" id="SexoUsuario" value="H" th:field="*{Usuario.Sexo}"> Hombre</label>
+                                        </div>
+                                        <div class="col radio">
+                                            <label><input type="radio" name="SexoUsuario" id="SexoUsuario" value="M"th:field="*{Usuario.Sexo}"> Mujer</label>
+                                        </div>
+                                        <div class="col radio">
+                                            <label><input type="radio" name="SexoUsuario" id="SexoUsuario" value="X"th:field="*{Usuario.Sexo}"> No Binario</label>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <h3 class="mb-3">Datos de la cuenta</h3> 

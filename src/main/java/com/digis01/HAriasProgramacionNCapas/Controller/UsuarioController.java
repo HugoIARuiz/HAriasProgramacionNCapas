@@ -194,7 +194,7 @@ public class UsuarioController {
                     usuarioDireccion.Usuario = new Usuario();
                     usuarioDireccion.Usuario.setNombre(row.getCell(0).toString());
                     usuarioDireccion.Usuario.setApellidoPaterno(row.getCell(1).toString());
-                    usuarioDireccion.Usuario.setApellidoPaterno(row.getCell(2).toString());
+                    usuarioDireccion.Usuario.setApellidoMaterno(row.getCell(2).toString());
                     Cell cell = row.getCell(3);
                     Date fechaNac;
                     if (cell.getCellType() == CellType.NUMERIC) {
