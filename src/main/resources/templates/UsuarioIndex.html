@@ -1,0 +1,108 @@
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultra.net.nz/thyemeleaf/layout"
+      layout:decorate = ~{layout}>
+
+    <body layout:fragment = "body">
+        <div class="container mt-5" >
+            <h1 class="mb-3" style="text-align: center;"><i class="bi bi-person-circle"></i>  Directorio de Usuarios</h1>
+
+            <form th:action="@{/Usuario/GetAllDinamico}" method="post" th:object="${usuarioBusqueda}"  class="row g-3 mb-4"> 
+
+
+                <div class="col-md-12">
+                    <div class="card border-light row  p-3 h-100">
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label for="NombreUsuario" class="form-label fw-bold">Nombre</label>
+                                <input id="NombreUsuario" type="text" class="form-control" placeholder="Nombre" th:field="*{Nombre}" >
+                                
+
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="ApellidoPaternoUsuario" class="form-label fw-bold">Apellido Paterno</label>
+                                <input id="ApellidoPaternoUsuario" type="text" class="form-control" placeholder="Apellido Paterno"  th:field="*{ApellidoPaterno}">
+                                
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="ApellidoMaternoUsuario" class="form-label fw-bold">Apellido Materno</label>
+                                <input id="ApellidoMaternoUsuario" type="text" class="form-control" placeholder="Apellido Materno " th:field="*{ApellidoMaterno}">
+
+
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                <label for="RolUsuario" class="form-label fw-bold">Rol</label>
+
+                                <select id="rolUsuario" class="form-select" aria-label="Default select example" th:field="*{Rol.IdRol}"> 
+                                
+                                    <option value = 0 selected>Selecciona un rol</option>
+                                    <option th:each="rol : ${roles}" th:value="${rol.IdRol}" th:text="${rol.Nombre}"> </option>
+                                </select>
+
+                            </div>
+                            <div class="col-md-1 mt-3 "  style="text-align: center;">
+                                <button type="submit" class="btn btn-outline-secondary " ><i class="bi bi-search"></i>  Buscar</button>
+                            </div>
+
+                        </div>
+                    </div> 
+
+                </div> 
+            </form>
+            <a  class="btn btn-outline-primary mt-3" th:href="@{/Usuario/Form/0}"><i class="bi bi-person-add"></i>  Agregar</a>
+            <table class="table table-striped mt-3" style="text-align: left; vertical-align: middle;">
+                <thead>
+                    <tr> 
+                        <th class="col-1" style="text-align: left;">Estatus</th>
+                        <th style="text-align: center;">Imagen</th>
+                        <th style="text-align: center;">Nombre</th>
+                        <th class="col-1" >Username </th>
+                        <th class="col-2">Contacto</th>
+                        <th style="text-align: center;">Direccion</th>
+                        <th class="col-1" style="text-align: center;" >Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each= "usuarioDirecciones : ${listaUsuarios}">
+                        <td scope="row" style="text-align: center;" >
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="status" th:checked="${usuarioDirecciones.Usuario.Status == 1}" 
+                                       th:attr="estatus=${usuarioDirecciones.Usuario.IdUsuario}" onchange="toggleStatus(this)">
+                                <label class="form-check-label" for="flexSwitchCheckDefault"></label>
+                            </div>
+                        </td>
+                        <td><img style="max-width: 75px" th:src="${usuarioDirecciones.Usuario.Imagen != null} ? 'data:image/png;base64,' + ${usuarioDirecciones.Usuario.Imagen} :'https://static-00.iconduck.com/assets.00/profile-default-icon-2048x2045-u3j7s5nj.png'" /></td>
+                        <td th:text="${usuarioDirecciones.Usuario.ApellidoMaterno != Null} ? ${usuarioDirecciones.Usuario.Nombre} + ' ' +${usuarioDirecciones.Usuario.ApellidoPaterno}+' ' +${usuarioDirecciones.Usuario.ApellidoMaterno} : ${usuarioDirecciones.Usuario.Nombre} + ' ' +${usuarioDirecciones.Usuario.ApellidoPaterno}"></td>
+                        <td th:text="${usuarioDirecciones.Usuario.Username}"></td>
+                        <td th:utext="${usuarioDirecciones.Usuario.Celular != Null} ? 'Telefono: ' + ${usuarioDirecciones.Usuario.Telefono}+'<br>Celular: '+${usuarioDirecciones.Usuario.Celular}+'<br>Email: '+${usuarioDirecciones.Usuario.Email} : 'Telefono: ' + ${usuarioDirecciones.Usuario.Telefono}+'<br>Email: '+${usuarioDirecciones.Usuario.Email}"></td>
+                        <td ><ul><li th:each="direccion : ${usuarioDirecciones.Direcciones}" th:text="${direccion.Calle != Null} ?  ${direccion.Calle}+' '+(${direccion.NumeroInterior != Null} ? ${direccion.NumeroInterior}: ' ')+ ' '+${direccion.NumeroExterior}+', '+ ${direccion.Colonia.Nombre}+' '+ ${direccion.Colonia.CodigoPostal}+', '+ ${direccion.Colonia.Municipio.Nombre}+', '+ ${direccion.Colonia.Municipio.Estado.Nombre}+', '+${direccion.Colonia.Municipio.Estado.Pais.Nombre} : 'Sin dirección'"></li></ul></td>
+                        <td scope="row" style="text-align: center;"> <a  class="btn btn-outline-primary" th:href="@{/Usuario/Form/{IdUsuario}(IdUsuario = ${usuarioDirecciones.Usuario.IdUsuario})}"><i class="bi bi-pencil-square"></i></a>
+                            <a class="btn btn-outline-danger" th:href="@{/Usuario/DelateUsuario?IdUsuario=}+${usuarioDirecciones.Usuario.IdUsuario}"><i class="bi bi-trash3"></i></a></td>
+                    </tr>
+
+
+                </tbody>
+            </table>
+        </div>
+        <script>
+            $(document).ready(function () {
+                function toggleStatus(#status) {
+                    var IdUsuario =
+                            $.ajax({
+                                type: "POST",
+                                url: "/Usuario/cambiarEstatus",
+                                dataTypoe: "json",
+                                success: function (data) {
+                                    $("#status")
+                                }
+                            });
+                }
+                );
+
+
+            });
+
+        </script>
+
+    </body>
+</html>

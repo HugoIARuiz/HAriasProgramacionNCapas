@@ -1,0 +1,2 @@
+Mario Neftali|Ruiz|Villafaña|1988-06-15|7226784595|MRuiz15|mruiz15@gmail.com|Password$1|H|7845956315||1|El Alamo||250|6|1
+Rita Ines|Villafaña|Vargas|1957-02-14|5598746123|RVargas57|rvargar57@gmail.com|Password$57|M|4512569874||2|El conejo|459|459-A|13|0
