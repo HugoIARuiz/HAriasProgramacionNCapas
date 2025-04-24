@@ -20,8 +20,17 @@
                         <div  id="formularioArchivo" style="display: none; text-align: center;">
                             <br>
                             <form action="/Usuario/CargaMasiva" method="post" enctype="multipart/form-data">
-                                <input type="file" id="archivo" name="archivo" accept=".xlsx,.txt">
-                                <button type="submit" class="btn btn-success" id="cargaMasiva">Subir Archivo</button>
+                                <div class="row"> 
+                                    <div class="col-md-12 mb-3"> 
+                                        <input type="file" id="archivo" name="archivo" accept=".xlsx,.txt">
+                                    </div>
+                                    <div class="col-md-12 mb-3"> 
+                                        <button type="submit" class="btn btn-success" id="cargaMasiva">Subir Archivo</button>
+                                    </div>
+
+                                </div>
+
+
                             </form>
                         </div>
 
@@ -60,35 +69,40 @@
 
 
         <script>
-          
+
             let tipoArchivo = "";
-                    document.getElementById("buttonXlsx").addEventListener("click", function () {
-                    tipoArchivo = "xlsx";
-                    document.getElementById("formularioArchivo").style.display = "block";
-                    document.getElementById("archivo").setAttribute("accept", ".xlsx");
-                    document.getElementById("cargaMasiva").classList.remove("btn-primary");
-                    document.getElementById("cargaMasiva").classList.add("btn-success");
+            document.getElementById("buttonXlsx").addEventListener("click", function () {
+                tipoArchivo = "xlsx";
+                document.getElementById("formularioArchivo").style.display = "block";
+                document.getElementById("archivo").setAttribute("accept", ".xlsx");
+
+                document.getElementById("archivo").style.background = '#198754';
+                document.getElementById("cargaMasiva").classList.remove("btn-primary");
+                document.getElementById("cargaMasiva").classList.add("btn-success");
             });
-                    document.getElementById("buttonTxT").addEventListener("click", function () {
-            tipoArchivo = "txt";
-                    document.getElementById("formularioArchivo").style.display = "block";
-                    document.getElementById("archivo").setAttribute("accept", ".txt");
-                    document.getElementById("cargaMasiva").classList.remove("btn-success");
-                    document.getElementById("cargaMasiva").classList.add("btn-primary");
+            document.getElementById("buttonTxT").addEventListener("click", function () {
+                tipoArchivo = "txt";
+                document.getElementById("formularioArchivo").style.display = "block";
+                document.getElementById("archivo").setAttribute("accept", ".txt");
+                document.getElementById("archivo").style.background = '#0d6efd';
+                document.getElementById("cargaMasiva").classList.remove("btn-success");
+                document.getElementById("cargaMasiva").classList.add("btn-primary");
             });
-                    document.getElementById("archivo").addEventListener("change", function () {
-            if (this.files.length > 0) {
-            var fileName = this.files[0].name;
+            document.getElementById("archivo").addEventListener("change", function () {
+                if (this.files.length > 0) {
+                    var fileName = this.files[0].name;
                     var fileExtension = fileName.split('.').pop().toLowerCase();
                     if (fileExtension !== tipoArchivo) {
-            alert("Por favor, seleccione un archivo " + tipoArchivo.toUpperCase() + " válido.");
-                    this.value = "";
-            }
-            }
+                        alert("Por favor, seleccione un archivo " + tipoArchivo.toUpperCase() + " válido.");
+                        this.value = "";
+                    }
+                }
             });
-                    
+
 
         </script>
 
+
     </body>
+
 </html>

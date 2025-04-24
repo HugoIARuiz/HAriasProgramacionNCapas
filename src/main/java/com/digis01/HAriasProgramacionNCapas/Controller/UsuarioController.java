@@ -310,6 +310,8 @@ public class UsuarioController {
             usuarioDAOImplementation.Add(usuarioDireccion);
         }
         
+        session.removeAttribute("urlFile");;
+        
         return "redirect:/Usuario/index";
     }
 

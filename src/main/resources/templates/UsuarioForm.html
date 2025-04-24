@@ -17,215 +17,216 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script><script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     </head>
 
-    <body layout:fragment="body">
-        <div  class="container mt-5 ">
-            <h1 class="mb-3" th:if="${(usuarioDireccion.Usuario.IdUsuario == 0 && usuarioDireccion.Direccion.IdDireccion == 0)}">Registro nuevo usuario</h1>
-            <h1 class="mb-3" th:if="${(usuarioDireccion.Usuario.IdUsuario != 0 && usuarioDireccion.Direccion.IdDireccion == -1)}">Editar usuario</h1>
-            <h1 class="mb-3" th:if="${(usuarioDireccion.Usuario.IdUsuario != 0 && usuarioDireccion.Direccion.IdDireccion == 0)} ">Agregar dirección</h1>
-            <h1 class="mb-3" th:if="${(usuarioDireccion.Usuario.IdUsuario != 0 && usuarioDireccion.Direccion.IdDireccion > 0)} ">Editar dirección</h1>
-            <form th:action="@{/Usuario/Form}" method="post" th:object="${usuarioDireccion}" enctype="multipart/form-data">
-                <input type="hidden" th:field="*{Usuario.IdUsuario}"> 
-                <input type="hidden" th:field="*{Direccion.IdDireccion}">
+    <body layout:fragment="body" class="fondo">
+        <div >
+            <div  class="container mt-5 ">
+                <h1 class="mb-3" th:if="${(usuarioDireccion.Usuario.IdUsuario == 0 && usuarioDireccion.Direccion.IdDireccion == 0)}" style="text-align: center;">Registro nuevo usuario</h1>
+                <h1 class="mb-3" th:if="${(usuarioDireccion.Usuario.IdUsuario != 0 && usuarioDireccion.Direccion.IdDireccion == -1)}" style="text-align: center;">Editar usuario</h1>
+                <h1 class="mb-3" th:if="${(usuarioDireccion.Usuario.IdUsuario != 0 && usuarioDireccion.Direccion.IdDireccion == 0)} " style="text-align: center;">Agregar dirección</h1>
+                <h1 class="mb-3" th:if="${(usuarioDireccion.Usuario.IdUsuario != 0 && usuarioDireccion.Direccion.IdDireccion > 0)} " style="text-align: center;">Editar dirección</h1>
+                <form th:action="@{/Usuario/Form}" method="post" th:object="${usuarioDireccion}" enctype="multipart/form-data">
+                    <input type="hidden" th:field="*{Usuario.IdUsuario}"> 
+                    <input type="hidden" th:field="*{Direccion.IdDireccion}">
 
 
 
-                <div class="row mb-3"  th:if="${(usuarioDireccion.Usuario.IdUsuario == 0 && usuarioDireccion.Direccion.IdDireccion == 0) || (usuarioDireccion.Usuario.IdUsuario != 0 && usuarioDireccion.Direccion.IdDireccion == -1)}">
-                    <div class="col-md-4 text-center d-flex flex-column align-items-center">
-                        <div class="card p-3 w-100 h-100"> 
-                            <label for="imagenFile" class="form-label fw-bold">Imagen</label>
-                            <input type="file" class="form-control mb-2" name="imagenFile" id="imagenFile">
-                            <img id="previewImage" style="max-width: 300px; max-height: auto" class="mx-auto" th:src="${usuarioDireccion.Usuario.Imagen != null} ?
-                                 'data:image/png;base64,' + ${usuarioDireccion.Usuario.Imagen} :
-                                 'https://static-00.iconduck.com/assets.00/profile-default-icon-2048x2045-u3j7s5nj.png'" />
+                    <div class="row mb-3"  th:if="${(usuarioDireccion.Usuario.IdUsuario == 0 && usuarioDireccion.Direccion.IdDireccion == 0) || (usuarioDireccion.Usuario.IdUsuario != 0 && usuarioDireccion.Direccion.IdDireccion == -1)}">
+                        <div class="col-md-4 text-center d-flex flex-column align-items-center">
+                            <div class="card p-3 w-100 h-100 "> 
+                                <label for="imagenFile" class="form-label fw-bold">Imagen</label>
+                                <input type="file" class="form-control mb-2" name="imagenFile" id="imagenFile">
+                                <img id="previewImage" style="max-width: 300px; max-height: auto" class="mx-auto" th:src="${usuarioDireccion.Usuario.Imagen != null} ?
+                                     'data:image/png;base64,' + ${usuarioDireccion.Usuario.Imagen} :
+                                     'https://static-00.iconduck.com/assets.00/profile-default-icon-2048x2045-u3j7s5nj.png'" />
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card  p-3 h-100">
-                            <h3 class="mb-3">Datos personales</h3>
-                            <div class="mb-3">
-                                <label for="NombreUsuario" class="form-label fw-bold">Nombre</label>
-                                <input id="NombreUsuario" type="text" class="form-control" placeholder="Nombre" th:field="*{Usuario.Nombre}" onkeypress="return SoloLetras(event, this)" >
-                                <span th:if="${#fields.hasErrors('Usuario.Nombre')}" th:errors="*{Usuario.Nombre}" class="text-danger"></span>
-                                <span id="NombreUsuarioError" class="text-danger"></span>
-                            </div>
-
-                            <div class="row">
-                                <div class="col mb-3">
-                                    <label for="ApellidoPaternoUsuario" class="form-label fw-bold">Apellido Paterno</label>
-                                    <input id="ApellidoPaternoUsuario" type="text" class="form-control" placeholder="Apellido Paterno" th:field="*{Usuario.ApellidoPaterno}" onkeypress="return SoloLetras(event, this)" >
-                                    <span th:if="${#fields.hasErrors('Usuario.ApellidoPaterno')}" th:errors="*{Usuario.ApellidoPaterno}" class="text-danger"></span>
-                                    <span id="ApellidoPaternoUsuarioError" class="text-danger"></span>
-                                </div>
-                                <div class="col mb-3">
-                                    <label for="ApellidoMaternoUsuario" class="form-label fw-bold">Apellido Materno</label>
-                                    <input id="ApellidoMaternoUsuario" type="text" class="form-control" placeholder="Apellido Materno (Opcional)" th:field="*{Usuario.ApellidoMaterno}" onkeypress="return SoloLetras(event, this)">
-                                    <span th:if="${#fields.hasErrors('Usuario.ApellidoMaterno')}" th:errors="*{Usuario.ApellidoMaterno}" class="text-danger"></span>
-                                    <span id="ApellidoMaternoUsuarioError" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col mb-3">
-                                    <label for="FechaNacUsuario" class="form-label fw-bold">Fecha de Nacimiento</label>
-                                    <input id="FechaNacUsuario" type="date" class="form-control" th:field="*{Usuario.FechaNacimiento}">
-                                    <span th:if="${#fields.hasErrors('Usuario.FechaNacimiento')}" th:errors="*{Usuario.FechaNacimiento}" class="text-danger"></span>
+                        <div class="col-md-8">
+                            <div class="card  p-3 h-100">
+                                <h3 class="mb-3">Datos personales</h3>
+                                <div class="mb-3">
+                                    <label for="NombreUsuario" class="form-label fw-bold">Nombre</label>
+                                    <input id="NombreUsuario" type="text" class="form-control" placeholder="Nombre" th:field="*{Usuario.Nombre}" onkeypress="return SoloLetras(event, this)" >
+                                    <span th:if="${#fields.hasErrors('Usuario.Nombre')}" th:errors="*{Usuario.Nombre}" class="text-danger"></span>
+                                    <span id="NombreUsuarioError" class="text-danger"></span>
                                 </div>
 
-                            </div>
-                            <div class="row">
-                                <div class="col mb-3">
-                                    <label for="CurpUsuario" class="form-label fw-bold">CURP</label>
-                                    <input id="CurpUsuario" type="text" class="form-control" placeholder="(Opcional)" th:field="*{Usuario.Curp}" onkeypress="return ValidaCurp(event, this)" >
-                                    <span th:if="${#fields.hasErrors('Usuario.Curp')}" th:errors="*{Usuario.Curp}" class="text-danger"></span>
-                                    <span id="CurpUsuarioError" class="text-danger"></span>
+                                <div class="row">
+                                    <div class="col mb-3">
+                                        <label for="ApellidoPaternoUsuario" class="form-label fw-bold">Apellido Paterno</label>
+                                        <input id="ApellidoPaternoUsuario" type="text" class="form-control" placeholder="Apellido Paterno" th:field="*{Usuario.ApellidoPaterno}" onkeypress="return SoloLetras(event, this)" >
+                                        <span th:if="${#fields.hasErrors('Usuario.ApellidoPaterno')}" th:errors="*{Usuario.ApellidoPaterno}" class="text-danger"></span>
+                                        <span id="ApellidoPaternoUsuarioError" class="text-danger"></span>
+                                    </div>
+                                    <div class="col mb-3">
+                                        <label for="ApellidoMaternoUsuario" class="form-label fw-bold">Apellido Materno</label>
+                                        <input id="ApellidoMaternoUsuario" type="text" class="form-control" placeholder="Apellido Materno (Opcional)" th:field="*{Usuario.ApellidoMaterno}" onkeypress="return SoloLetras(event, this)">
+                                        <span th:if="${#fields.hasErrors('Usuario.ApellidoMaterno')}" th:errors="*{Usuario.ApellidoMaterno}" class="text-danger"></span>
+                                        <span id="ApellidoMaternoUsuarioError" class="text-danger"></span>
+                                    </div>
                                 </div>
-                                <div class="col mb-3">
-                                    <div class="row">
-                                        <label for="SexoUsuario" class=" form-label fw-bold">Sexo</label>
-                                        <div class="col radio">
-                                            <label><input type="radio" name="SexoUsuario" id="SexoUsuario" value="H" th:field="*{Usuario.Sexo}"> Hombre</label>
-                                        </div>
-                                        <div class="col radio">
-                                            <label><input type="radio" name="SexoUsuario" id="SexoUsuario" value="M"th:field="*{Usuario.Sexo}"> Mujer</label>
-                                        </div>
-                                        <div class="col radio">
-                                            <label><input type="radio" name="SexoUsuario" id="SexoUsuario" value="X"th:field="*{Usuario.Sexo}"> No Binario</label>
+                                <div class="row">
+                                    <div class="col mb-3">
+                                        <label for="FechaNacUsuario" class="form-label fw-bold">Fecha de Nacimiento</label>
+                                        <input id="FechaNacUsuario" type="date" class="form-control" th:field="*{Usuario.FechaNacimiento}">
+                                        <span th:if="${#fields.hasErrors('Usuario.FechaNacimiento')}" th:errors="*{Usuario.FechaNacimiento}" class="text-danger"></span>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col mb-3">
+                                        <label for="CurpUsuario" class="form-label fw-bold">CURP</label>
+                                        <input id="CurpUsuario" type="text" class="form-control" placeholder="(Opcional)" th:field="*{Usuario.Curp}" onkeypress="return ValidaCurp(event, this)" >
+                                        <span th:if="${#fields.hasErrors('Usuario.Curp')}" th:errors="*{Usuario.Curp}" class="text-danger"></span>
+                                        <span id="CurpUsuarioError" class="text-danger"></span>
+                                    </div>
+                                    <div class="col mb-3">
+                                        <div class="row">
+                                            <label for="SexoUsuario" class=" form-label fw-bold">Sexo</label>
+                                            <div class="col radio">
+                                                <label><input type="radio" name="SexoUsuario" id="SexoUsuario" value="H" th:field="*{Usuario.Sexo}"> Hombre</label>
+                                            </div>
+                                            <div class="col radio">
+                                                <label><input type="radio" name="SexoUsuario" id="SexoUsuario" value="M"th:field="*{Usuario.Sexo}"> Mujer</label>
+                                            </div>
+                                            <div class="col radio">
+                                                <label><input type="radio" name="SexoUsuario" id="SexoUsuario" value="X"th:field="*{Usuario.Sexo}"> No Binario</label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <h3 class="mb-3">Datos de la cuenta</h3> 
-                            <div class="row">
-                                <div class="col mb-3">
-                                    <label for="UsernameUsuario" class="form-label fw-bold">Username</label>
-                                    <input id="UsernameUsuario" type="text" class="form-control" placeholder="Username" th:field="*{Usuario.Username}" onkeypress="return ValidaUsername(event, this)">
-                                    <span th:if="${#fields.hasErrors('Usuario.Username')}" th:errors="*{Usuario.Username}" class="text-danger"></span>
-                                    <span id="UsernameUsuarioError" class="text-danger"></span>
+                                <h3 class="mb-3">Datos de la cuenta</h3> 
+                                <div class="row">
+                                    <div class="col mb-3">
+                                        <label for="UsernameUsuario" class="form-label fw-bold">Username</label>
+                                        <input id="UsernameUsuario" type="text" class="form-control" placeholder="Username" th:field="*{Usuario.Username}" onkeypress="return ValidaUsername(event, this)">
+                                        <span th:if="${#fields.hasErrors('Usuario.Username')}" th:errors="*{Usuario.Username}" class="text-danger"></span>
+                                        <span id="UsernameUsuarioError" class="text-danger"></span>
+                                    </div>
+                                    <div class="col mb-3">
+                                        <label for="RolUsuario" class="form-label fw-bold">Rol</label>
+                                        <!--                                    <input id="RolUsuario" type="text" class="form-control" placeholder="Rol" th:field="*{Usuario.Rol.IdRol}" onkeypress="return SoloNumeros(event, this)" >-->
+                                        <select id="rolUsuario" class="form-select" aria-label="Default select example" th:field="*{Usuario.Rol.IdRol}"> 
+                                            <option value = 0 selected>Selecciona un rol</option>
+                                            <option th:each="rol : ${roles}" th:value="${rol.IdRol}" th:text="${rol.Nombre}"> </option>
+                                        </select>
+                                        <!--
+                                                                            <span th:if="${#fields.hasErrors('Usuario.Rol.IdRol')}" th:errors="*{Usuario.Rol.IdRol}" class="text-danger"></span>
+                                                                            <span id="RolUsuarioError" class="text-danger"></span>-->
+                                    </div>
+
                                 </div>
-                                <div class="col mb-3">
-                                    <label for="RolUsuario" class="form-label fw-bold">Rol</label>
-                                    <!--                                    <input id="RolUsuario" type="text" class="form-control" placeholder="Rol" th:field="*{Usuario.Rol.IdRol}" onkeypress="return SoloNumeros(event, this)" >-->
-                                    <select id="rolUsuario" class="form-select" aria-label="Default select example" th:field="*{Usuario.Rol.IdRol}"> 
-                                        <option value = 0 selected>Selecciona un rol</option>
-                                        <option th:each="rol : ${roles}" th:value="${rol.IdRol}" th:text="${rol.Nombre}"> </option>
-                                    </select>
-                                    <!--
-                                                                        <span th:if="${#fields.hasErrors('Usuario.Rol.IdRol')}" th:errors="*{Usuario.Rol.IdRol}" class="text-danger"></span>
-                                                                        <span id="RolUsuarioError" class="text-danger"></span>-->
+                                <div class="row">
+
+                                    <div class="col mb-3">
+                                        <label for="EmailUsuario" class="form-label fw-bold">Email</label>
+                                        <input id="EmailUsuario" type="email" class="form-control" placeholder="Email" th:field="*{Usuario.Email}" onblur="return ValidaEmail(event, input)" >
+                                        <span th:if="${#fields.hasErrors('Usuario.Email')}" th:errors="*{Usuario.Email}" class="text-danger"></span>
+                                        <span id="EmailUsuarioError" class="text-danger"></span>
+                                    </div>
+                                    <div class="col mb-3">
+                                        <label for="PasswordUsuario" class="form-label fw-bold">Password</label>
+                                        <input id="PasswordUsuario" type="text" class="form-control" placeholder="Contraseña" th:field="*{Usuario.Password}" onblur="return ValidaPassword(event, this)" >
+                                        <span th:if="${#fields.hasErrors('Usuario.Password')}" th:errors="*{Usuario.Password}" class="text-danger"></span>
+                                        <span id="PasswordUsuarioError" class="text-danger"></span>
+                                    </div>
                                 </div>
 
-                            </div>
-                            <div class="row">
-
-                                <div class="col mb-3">
-                                    <label for="EmailUsuario" class="form-label fw-bold">Email</label>
-                                    <input id="EmailUsuario" type="email" class="form-control" placeholder="Email" th:field="*{Usuario.Email}" onblur="return ValidaEmail(event, input)" >
-                                    <span th:if="${#fields.hasErrors('Usuario.Email')}" th:errors="*{Usuario.Email}" class="text-danger"></span>
-                                    <span id="EmailUsuarioError" class="text-danger"></span>
-                                </div>
-                                <div class="col mb-3">
-                                    <label for="PasswordUsuario" class="form-label fw-bold">Password</label>
-                                    <input id="PasswordUsuario" type="text" class="form-control" placeholder="Contraseña" th:field="*{Usuario.Password}" onblur="return ValidaPassword(event, this)" >
-                                    <span th:if="${#fields.hasErrors('Usuario.Password')}" th:errors="*{Usuario.Password}" class="text-danger"></span>
-                                    <span id="PasswordUsuarioError" class="text-danger"></span>
-                                </div>
-                            </div>
-
-                            <h3 class="mb-3">Datos de contacto</h3> 
-                            <div class="row">
-                                <div class="col mb-3">
-                                    <label for="TelefonoUsuario" class="form-label fw-bold">Telefono</label>
-                                    <input id="TelefonoUsuario" type="text" class="form-control"  th:field="*{Usuario.Telefono}" onkeypress="return NumerosTelefono(event, this)" >
-                                    <span th:if="${#fields.hasErrors('Usuario.Telefono')}" th:errors="*{Usuario.Telefono}" class="text-danger"></span>
-                                    <span id="TelefonoUsuarioError" class="text-danger"></span>
-                                </div>
-                                <div class="col mb-3">
-                                    <label for="CelularUsuario" class="form-label fw-bold">Celular</label>
-                                    <input id="CelularUsuario" type="text" class="form-control" placeholder="(Opcional)" th:field="*{Usuario.Celular}" onkeypress="return NumerosTelefono(event, this)">
-                                    <span th:if="${#fields.hasErrors('Usuario.Celular')}" th:errors="*{Usuario.Celular}" class="text-danger"></span>
-                                    <span id="CelularUsuarioError" class="text-danger"></span>
+                                <h3 class="mb-3">Datos de contacto</h3> 
+                                <div class="row">
+                                    <div class="col mb-3">
+                                        <label for="TelefonoUsuario" class="form-label fw-bold">Telefono</label>
+                                        <input id="TelefonoUsuario" type="text" class="form-control"  th:field="*{Usuario.Telefono}" onkeypress="return NumerosTelefono(event, this)" >
+                                        <span th:if="${#fields.hasErrors('Usuario.Telefono')}" th:errors="*{Usuario.Telefono}" class="text-danger"></span>
+                                        <span id="TelefonoUsuarioError" class="text-danger"></span>
+                                    </div>
+                                    <div class="col mb-3">
+                                        <label for="CelularUsuario" class="form-label fw-bold">Celular</label>
+                                        <input id="CelularUsuario" type="text" class="form-control" placeholder="(Opcional)" th:field="*{Usuario.Celular}" onkeypress="return NumerosTelefono(event, this)">
+                                        <span th:if="${#fields.hasErrors('Usuario.Celular')}" th:errors="*{Usuario.Celular}" class="text-danger"></span>
+                                        <span id="CelularUsuarioError" class="text-danger"></span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <hr>
+                    <hr>
 
 
-                <div class="card p-3"  th:if="${(usuarioDireccion.Usuario.IdUsuario != 0 && usuarioDireccion.Direccion.IdDireccion > 0) || (usuarioDireccion.Usuario.IdUsuario != 0 && usuarioDireccion.Direccion.IdDireccion == 0) || (usuarioDireccion.Usuario.IdUsuario == 0 && usuarioDireccion.Direccion.IdDireccion == 0)}">
-                    <div class="row mb-3">
-                        <h3 class="mb-3">Direccion</h3>
+                    <div class="card p-3"  th:if="${(usuarioDireccion.Usuario.IdUsuario != 0 && usuarioDireccion.Direccion.IdDireccion > 0) || (usuarioDireccion.Usuario.IdUsuario != 0 && usuarioDireccion.Direccion.IdDireccion == 0) || (usuarioDireccion.Usuario.IdUsuario == 0 && usuarioDireccion.Direccion.IdDireccion == 0)}">
+                        <div class="row mb-3">
+                            <h3 class="mb-3">Direccion</h3>
 
-                        <div class="col-md-8">
-                            <label for="paisddl" class="form-label fw-bold">Pais</label>
-                            <select id="paisddl" class="form-select" aria-label="Default select example" th:field="*{Direccion.Colonia.Municipio.Estado.Pais.IdPais}"> 
-                                <option value = 0 >Selecciona un país</option>
-                                <option th:each="pais : ${paises}" th:value="${pais.IdPais}" th:text="${pais.Nombre}"> </option>
-                            </select>
+                            <div class="col-md-8">
+                                <label for="paisddl" class="form-label fw-bold">Pais</label>
+                                <select id="paisddl" class="form-select" aria-label="Default select example" th:field="*{Direccion.Colonia.Municipio.Estado.Pais.IdPais}"> 
+                                    <option value = 0 >Selecciona un país</option>
+                                    <option th:each="pais : ${paises}" th:value="${pais.IdPais}" th:text="${pais.Nombre}"> </option>
+                                </select>
+                            </div>
+
+
+                            <div class="col-md-4">
+                                <label for="estadoddl" class="form-label fw-bold">Estado</label>
+                                <select id="estadoddl" class="form-select" aria-label="Default select example" th:field="*{Direccion.Colonia.Municipio.Estado.IdEstado}">
+                                    <option value=0 >Selecciona un Estado</option>
+                                    <option th:each="estado : ${estados}" th:value="${estado.IdEstado}" th:text="${estado.Nombre}"> </option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="municipioddl" class="form-label fw-bold">Municipio</label>
+                                <select id="municipioddl" class="form-select" aria-label="Default select example" th:field="*{Direccion.Colonia.Municipio.IdMunicipio}">
+                                    <option value=0 >Selecciona un Municipio</option>
+                                    <option th:each="municipio : ${municipios}" th:value="${municipio.IdMunicipio}" th:text="${municipio.Nombre}"> </option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="coloniaddl" class="form-label fw-bold">Colonia</label>
+                                <select id="coloniaddl" class="form-select" aria-label="Default select example" th:field="*{Direccion.Colonia.IdColonia}">
+                                    <option value=0 >Selecciona una Colonia</option>
+                                    <option th:each="colonia : ${colonias}" th:value="${colonia.IdColonia}" th:text="${colonia.Nombre}"> </option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="CodigoPostal" class="form-label fw-bold">Código Postal</label>
+                                <input id="CodigoPostal" type="text" class="form-control" placeholder="Codigo Postal" th:field="*{Direccion.Colonia.CodigoPostal}">
+
+                            </div>
+
+
+                            <div class="col-md-8">
+                                <label for="CalleDireccion" class="form-label fw-bold">Calle</label>
+                                <input id="CalleDireccion" type="text" class="form-control" placeholder="Calle" th:field="*{Direccion.Calle}" onkeypress="return ValidaCalle(event, this)" >
+                                <span th:if="${#fields.hasErrors('Direccion.Calle')}" th:errors="*{Direccion.Calle}" class="text-danger"></span>
+                                <span id="CalleDireccionError" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="NumIntDireccion"class="form-label fw-bold">Número Interior</label>
+                                <input id="NumIntDireccion" type="text" class="form-control" placeholder="S/N si no cuenta" th:field="*{Direccion.NumeroInterior}" onkeypress="return NumerosCasa(event, this)">
+                                <span th:if="${#fields.hasErrors('Direccion.NumeroInterior')}" th:errors="*{Direccion.NumeroInterior}" class="text-danger"></span>
+                                <span id="NumIntDireccionError" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="NumExtDireccion" class="form-label fw-bold">Número Exterior</label>
+                                <input id="NumExtDireccion" type="text" class="form-control"  th:field="*{Direccion.NumeroExterior}" onkeypress="return NumerosCasa(event, this)" >
+                                <span th:if="${#fields.hasErrors('Direccion.NumeroExterior')}" th:errors="*{Direccion.NumeroExterior}" class="text-danger"></span>
+                                <span id="NumExtDireccionError" class="text-danger"></span>
+                            </div>
                         </div>
 
 
-                        <div class="col-md-4">
-                            <label for="estadoddl" class="form-label fw-bold">Estado</label>
-                            <select id="estadoddl" class="form-select" aria-label="Default select example" th:field="*{Direccion.Colonia.Municipio.Estado.IdEstado}">
-                                <option value=0 >Selecciona un Estado</option>
-                                <option th:each="estado : ${estados}" th:value="${estado.IdEstado}" th:text="${estado.Nombre}"> </option>
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <label for="municipioddl" class="form-label fw-bold">Municipio</label>
-                            <select id="municipioddl" class="form-select" aria-label="Default select example" th:field="*{Direccion.Colonia.Municipio.IdMunicipio}">
-                                <option value=0 >Selecciona un Municipio</option>
-                                <option th:each="municipio : ${municipios}" th:value="${municipio.IdMunicipio}" th:text="${municipio.Nombre}"> </option>
-                            </select>
-                        </div>
-
-                        <div class="col-md-4">
-                            <label for="coloniaddl" class="form-label fw-bold">Colonia</label>
-                            <select id="coloniaddl" class="form-select" aria-label="Default select example" th:field="*{Direccion.Colonia.IdColonia}">
-                                <option value=0 >Selecciona una Colonia</option>
-                                <option th:each="colonia : ${colonias}" th:value="${colonia.IdColonia}" th:text="${colonia.Nombre}"> </option>
-                            </select>
-                        </div>
-
-                        <div class="col-md-4">
-                            <label for="CodigoPostal" class="form-label fw-bold">Código Postal</label>
-                            <input id="CodigoPostal" type="text" class="form-control" placeholder="Codigo Postal" th:field="*{Direccion.Colonia.CodigoPostal}">
-
-                        </div>
-
-
-                        <div class="col-md-8">
-                            <label for="CalleDireccion" class="form-label fw-bold">Calle</label>
-                            <input id="CalleDireccion" type="text" class="form-control" placeholder="Calle" th:field="*{Direccion.Calle}" onkeypress="return ValidaCalle(event, this)" >
-                            <span th:if="${#fields.hasErrors('Direccion.Calle')}" th:errors="*{Direccion.Calle}" class="text-danger"></span>
-                            <span id="CalleDireccionError" class="text-danger"></span>
-                        </div>
-                        <div class="col-md-2">
-                            <label for="NumIntDireccion"class="form-label fw-bold">Número Interior</label>
-                            <input id="NumIntDireccion" type="text" class="form-control" placeholder="S/N si no cuenta" th:field="*{Direccion.NumeroInterior}" onkeypress="return NumerosCasa(event, this)">
-                            <span th:if="${#fields.hasErrors('Direccion.NumeroInterior')}" th:errors="*{Direccion.NumeroInterior}" class="text-danger"></span>
-                            <span id="NumIntDireccionError" class="text-danger"></span>
-                        </div>
-                        <div class="col-md-2">
-                            <label for="NumExtDireccion" class="form-label fw-bold">Número Exterior</label>
-                            <input id="NumExtDireccion" type="text" class="form-control"  th:field="*{Direccion.NumeroExterior}" onkeypress="return NumerosCasa(event, this)" >
-                            <span th:if="${#fields.hasErrors('Direccion.NumeroExterior')}" th:errors="*{Direccion.NumeroExterior}" class="text-danger"></span>
-                            <span id="NumExtDireccionError" class="text-danger"></span>
-                        </div>
                     </div>
 
+                    <div class="col-12 mt-5 mb-5"  style="text-align: center;">
+                        <button type="submit" class="btn btn-outline-success btn-lg" th:text="*{ (Usuario.IdUsuario) == 0 || (Direccion.IdDireccion) == 0 ? 'Agregar' : 'Editar'}">Agregar</button>
+                    </div>
 
-                </div>
+                </form>
+            </div>
 
-                <div class="col-12 mt-5 mb-5"  style="text-align: center;">
-                    <button type="submit" class="btn btn-outline-success btn-lg" th:text="*{ (Usuario.IdUsuario) == 0 || (Direccion.IdDireccion) == 0 ? 'Agregar' : 'Editar'}">Agregar</button>
-                </div>
 
-            </form>
         </div>
-
-
-
         <script>
             function SoloLetras(event, elemento) {
                 var key = event.key;
@@ -468,7 +469,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
             });
         </script>
 
+        <style>
+            .fondo {
+                background: linear-gradient(to top, #0057b8, #99caff);
+            }
+        </style>
+    </style>
 
-
-    </body>
+</body>
 </html>
