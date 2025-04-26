@@ -2,6 +2,8 @@ package com.digis01.HAriasProgramacionNCapas.DAO;
 
 import com.digis01.HAriasProgramacionNCapas.ML.Pais;
 import com.digis01.HAriasProgramacionNCapas.ML.Result;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import java.sql.ResultSet;
 import java.sql.Types;
 import java.util.ArrayList;
@@ -16,6 +18,8 @@ public class PaisDAOImplementation implements IPaisDAO {
     
     @Autowired
     private JdbcTemplate jdbcTemplate;
+     @Autowired // conexión de JPA
+    private EntityManager entityManager;
 
     @Override
     public Result GetAll() {
@@ -46,6 +50,20 @@ public class PaisDAOImplementation implements IPaisDAO {
             
         }
         
+        return result;
+    }
+
+    @Override
+    public Result GetAllJPA() {
+        Result result = new Result();
+        try {
+            TypedQuery<com.digis01.HAriasProgramacionNCapas.JPA.Pais> queryPais = entityManager.createQuery("FROM PAIS", com.digis01.HAriasProgramacionNCapas.JPA.Pais.class);
+            
+        } catch (Exception ex) {
+            result.correct = false;
+            result.errorMessage = ex.getLocalizedMessage();
+            result.ex = ex;
+        }
         return result;
     }
 

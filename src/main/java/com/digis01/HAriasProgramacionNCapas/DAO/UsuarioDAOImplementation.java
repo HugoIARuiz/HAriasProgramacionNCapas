@@ -9,9 +9,13 @@ import com.digis01.HAriasProgramacionNCapas.ML.Result;
 import com.digis01.HAriasProgramacionNCapas.ML.Usuario;
 import com.digis01.HAriasProgramacionNCapas.ML.Rol;
 import com.digis01.HAriasProgramacionNCapas.ML.UsuarioDireccion;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
+import jakarta.transaction.Transactional;
 import java.sql.ResultSet;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.CallableStatementCallback;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -22,6 +26,8 @@ public class UsuarioDAOImplementation implements IUsuarioDAO {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    @Autowired // conexión de JPA
+    private EntityManager entityManager;
 
     @Override
     public Result GetAll() {
@@ -128,7 +134,7 @@ public class UsuarioDAOImplementation implements IUsuarioDAO {
         Result result = new Result();
 
         try {
-            jdbcTemplate.execute("{CALL UsuarioDireccionAdd(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}", (CallableStatementCallback<Integer>) callableStatement -> {
+            jdbcTemplate.execute("Call UsuarioDireccionAdd(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", (CallableStatementCallback<Integer>) callableStatement -> {
 
                 callableStatement.setString(1, usuarioDireccion.Usuario.getNombre());
                 callableStatement.setString(2, usuarioDireccion.Usuario.getApellidoPaterno());
@@ -464,7 +470,7 @@ public class UsuarioDAOImplementation implements IUsuarioDAO {
 
                 return 1;
             });
-            
+
             result.correct = true;
 
         } catch (Exception ex) {
@@ -472,6 +478,156 @@ public class UsuarioDAOImplementation implements IUsuarioDAO {
             result.errorMessage = ex.getLocalizedMessage();
             result.ex = ex;
             result.objects = null;
+        }
+
+        return result;
+    }
+
+    @Override
+    public Result GetAllJPA() {
+
+        //Esto es lenguaje JPQL
+        Result result = new Result();
+        try {
+            TypedQuery<com.digis01.HAriasProgramacionNCapas.JPA.Usuario> queryusuarios = entityManager.createQuery("FROM Usuario ORDER BY IdUsuario", com.digis01.HAriasProgramacionNCapas.JPA.Usuario.class);
+            List<com.digis01.HAriasProgramacionNCapas.JPA.Usuario> usuarios = queryusuarios.getResultList();
+            result.objects = new ArrayList<>();
+            for (com.digis01.HAriasProgramacionNCapas.JPA.Usuario usuario : usuarios) {
+                UsuarioDireccion usuarioDireccion = new UsuarioDireccion();
+                usuarioDireccion.Usuario = new Usuario();
+                usuarioDireccion.Usuario.setIdUsuario(usuario.getIdUsuario());
+                usuarioDireccion.Usuario.setNombre(usuario.getNombre());
+                usuarioDireccion.Usuario.setApellidoPaterno(usuario.getApellidoPaterno());
+                usuarioDireccion.Usuario.setApellidoMaterno(usuario.getApellidoMaterno());
+                usuarioDireccion.Usuario.setFechaNacimiento(usuario.getFechaNacimiento());
+                usuarioDireccion.Usuario.setTelefono(usuario.getTelefono());
+                usuarioDireccion.Usuario.setUsername(usuario.getUsername());
+                usuarioDireccion.Usuario.setEmail(usuario.getEmail());
+                usuarioDireccion.Usuario.setPassword(usuario.getPassword());
+                usuarioDireccion.Usuario.setSexo(usuario.getSexo());
+                usuarioDireccion.Usuario.setCelular(usuario.getCelular());
+                usuarioDireccion.Usuario.setCurp(usuario.getCurp());
+                usuarioDireccion.Usuario.setImagen(usuario.getImagen());
+                usuarioDireccion.Usuario.setStatus(usuario.getStatus());
+                usuarioDireccion.Usuario.Rol = new Rol();
+                usuarioDireccion.Usuario.Rol.setIdRol(usuario.Rol.getIdRol());
+
+                TypedQuery<com.digis01.HAriasProgramacionNCapas.JPA.Direccion> queryDireccion = entityManager.createQuery("FROM Direccion  WHERE Usuario.IdUsuario = :idusuario", com.digis01.HAriasProgramacionNCapas.JPA.Direccion.class);
+                queryDireccion.setParameter("idusuario", usuario.getIdUsuario());
+
+                List<com.digis01.HAriasProgramacionNCapas.JPA.Direccion> direccionesJPA = queryDireccion.getResultList();
+                usuarioDireccion.Direcciones = new ArrayList<>();
+                for (com.digis01.HAriasProgramacionNCapas.JPA.Direccion direccionJPA : direccionesJPA) {
+                    Direccion direccion = new Direccion();
+                    direccion.setCalle(direccionJPA.getCalle());
+                    direccion.setNumeroInterior(direccionJPA.getNumeroInterior());
+                    direccion.setNumeroExterior(direccionJPA.getNumeroExterior());
+                    direccion.Colonia = new Colonia();
+                    direccion.Colonia.setIdColonia(direccionJPA.Colonia.getIdColonia());
+                    direccion.Colonia.setNombre(direccionJPA.Colonia.getNombre());
+                    direccion.Colonia.setCodigoPostal(direccionJPA.Colonia.getCodigoPostal());
+                    direccion.Colonia.Municipio = new Municipio();
+                    direccion.Colonia.Municipio.setIdMunicipio(direccionJPA.Colonia.Municipio.getIdMunicipio());
+                    direccion.Colonia.Municipio.setNombre(direccionJPA.Colonia.Municipio.getNombre());
+                    direccion.Colonia.Municipio.Estado = new Estado();
+                    direccion.Colonia.Municipio.Estado.setIdEstado(direccionJPA.Colonia.Municipio.Estado.getIdEstado());
+                    direccion.Colonia.Municipio.Estado.setNombre(direccionJPA.Colonia.Municipio.Estado.getNombre());
+                    direccion.Colonia.Municipio.Estado.Pais = new Pais();
+                    direccion.Colonia.Municipio.Estado.Pais.setIdPais(direccionJPA.Colonia.Municipio.Estado.Pais.getIdPais());
+                    direccion.Colonia.Municipio.Estado.Pais.setNombre(direccionJPA.Colonia.Municipio.Estado.Pais.getNombre());
+                    usuarioDireccion.Direcciones.add(direccion);
+                }
+                result.objects.add(usuarioDireccion);
+
+            }
+            result.correct = true;
+        } catch (Exception ex) {
+            result.correct = false;
+            result.errorMessage = ex.getLocalizedMessage();
+            result.ex = ex;
+        }
+
+        return result;
+    }
+
+    @Transactional
+    @Override
+    public Result AddJPA(UsuarioDireccion usuarioDireccion) {
+        Result result = new Result();
+        try {
+
+            //Llenar alumnoJPA con el alumnoML
+            com.digis01.HAriasProgramacionNCapas.JPA.Usuario usuarioJPA = new com.digis01.HAriasProgramacionNCapas.JPA.Usuario();
+            usuarioJPA.setNombre(usuarioDireccion.Usuario.getNombre());
+            usuarioJPA.setApellidoPaterno(usuarioDireccion.Usuario.getApellidoPaterno());
+            usuarioJPA.setApellidoMaterno(usuarioDireccion.Usuario.getApellidoMaterno());
+            usuarioJPA.setFechaNacimiento(usuarioDireccion.Usuario.getFechaNacimiento());
+            usuarioJPA.setTelefono(usuarioDireccion.Usuario.getTelefono());
+            usuarioJPA.setUsername(usuarioDireccion.Usuario.getUsername());
+            usuarioJPA.setEmail(usuarioDireccion.Usuario.getEmail());
+            usuarioJPA.setPassword(usuarioDireccion.Usuario.getPassword());
+            usuarioJPA.setSexo(usuarioDireccion.Usuario.getSexo());
+            usuarioJPA.setCelular(usuarioDireccion.Usuario.getCelular());
+            usuarioJPA.setCurp(usuarioDireccion.Usuario.getCurp());
+            usuarioJPA.Rol = new com.digis01.HAriasProgramacionNCapas.JPA.Rol();
+            usuarioJPA.Rol.setIdRol(usuarioDireccion.Usuario.Rol.getIdRol());
+            usuarioJPA.setImagen(usuarioDireccion.Usuario.getImagen());
+            usuarioJPA.setStatus(1);
+            
+
+            entityManager.persist(usuarioJPA);
+            //Inserción de la dirección
+            com.digis01.HAriasProgramacionNCapas.JPA.Direccion direccionJPA = new com.digis01.HAriasProgramacionNCapas.JPA.Direccion();
+            direccionJPA.setCalle(usuarioDireccion.Direccion.getCalle());
+            direccionJPA.setNumeroInterior(usuarioDireccion.Direccion.getNumeroInterior());
+            direccionJPA.setNumeroExterior(usuarioDireccion.Direccion.getNumeroExterior());
+            direccionJPA.Colonia = new com.digis01.HAriasProgramacionNCapas.JPA.Colonia();
+            direccionJPA.Colonia.setIdColonia(usuarioDireccion.Direccion.Colonia.getIdColonia());
+            direccionJPA.Usuario = usuarioJPA;
+            entityManager.persist(direccionJPA);
+
+            result.correct = true;
+
+        } catch (Exception ex) {
+            result.correct = false;
+            result.errorMessage = ex.getLocalizedMessage();
+            result.ex = ex;
+        }
+        return result;
+    }
+
+    @Transactional
+    @Override
+    public Result UpdateUsuarioJPA(Usuario usuario) {
+        Result result = new Result();
+        try {
+            com.digis01.HAriasProgramacionNCapas.JPA.Usuario usuarioJPA = new com.digis01.HAriasProgramacionNCapas.JPA.Usuario();
+            usuarioJPA = entityManager.find(com.digis01.HAriasProgramacionNCapas.JPA.Usuario.class, usuario.getIdUsuario());
+            usuarioJPA.setNombre(usuario.getNombre());
+            usuarioJPA.setApellidoPaterno(usuario.getApellidoPaterno());
+            usuarioJPA.setApellidoMaterno(usuario.getApellidoMaterno());
+            usuarioJPA.setFechaNacimiento(usuario.getFechaNacimiento());
+            usuarioJPA.setTelefono(usuario.getTelefono());
+            usuarioJPA.setUsername(usuario.getUsername());
+            usuarioJPA.setEmail(usuario.getEmail());
+            usuarioJPA.setPassword(usuario.getPassword());
+            usuarioJPA.setSexo(usuario.getSexo());
+            usuarioJPA.setCelular(usuario.getCelular());
+            usuarioJPA.setCurp(usuario.getCurp());
+            usuarioJPA.Rol = new com.digis01.HAriasProgramacionNCapas.JPA.Rol();
+            usuarioJPA.Rol.setIdRol(usuario.Rol.getIdRol());
+            usuarioJPA.setImagen(usuario.getImagen());
+            entityManager.merge(usuarioJPA);
+            
+            
+            
+
+            result.correct = true;
+        } catch (Exception ex) {
+            result.correct = false;
+            result.errorMessage = ex.getLocalizedMessage();
+            result.ex = ex;
+
         }
 
         return result;

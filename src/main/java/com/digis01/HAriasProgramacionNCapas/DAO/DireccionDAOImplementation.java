@@ -7,6 +7,8 @@ import com.digis01.HAriasProgramacionNCapas.ML.Municipio;
 import com.digis01.HAriasProgramacionNCapas.ML.Pais;
 import com.digis01.HAriasProgramacionNCapas.ML.Result;
 import com.digis01.HAriasProgramacionNCapas.ML.UsuarioDireccion;
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import java.sql.ResultSet;
 import java.sql.Types;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,8 @@ public class DireccionDAOImplementation implements IDireccionDAO {
 
     @Autowired
     JdbcTemplate jdbcTemplate;
+    @Autowired // conexión de JPA
+    private EntityManager entityManager;
 
     @Override
     public Result GetByIdDireccion(int IdDireccion) {
@@ -158,6 +162,30 @@ public class DireccionDAOImplementation implements IDireccionDAO {
             result.ex = ex;
         }
 
+        return result;
+    }
+    @Transactional
+    @Override
+    public Result AddDireccionJPA(UsuarioDireccion usuarioDireccion) {
+        Result result = new Result();
+        try {
+            com.digis01.HAriasProgramacionNCapas.JPA.Direccion direccionJPA = new com.digis01.HAriasProgramacionNCapas.JPA.Direccion();
+            direccionJPA.setCalle(usuarioDireccion.Direccion.getCalle());
+            direccionJPA.setNumeroInterior(usuarioDireccion.Direccion.getNumeroInterior());
+            direccionJPA.setNumeroExterior(usuarioDireccion.Direccion.getNumeroExterior());
+            direccionJPA.Colonia = new com.digis01.HAriasProgramacionNCapas.JPA.Colonia();
+            direccionJPA.Colonia.setIdColonia(usuarioDireccion.Direccion.Colonia.getIdColonia());
+            direccionJPA.Usuario = new com.digis01.HAriasProgramacionNCapas.JPA.Usuario();
+            direccionJPA.Usuario.setIdUsuario(usuarioDireccion.Usuario.getIdUsuario());
+            entityManager.persist(direccionJPA);
+            
+            result.correct = true;
+            
+        } catch (Exception ex) {
+            result.correct = false;
+            result.errorMessage = ex.getLocalizedMessage();
+            result.ex = ex;
+        }
         return result;
     }
 

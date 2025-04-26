@@ -32,7 +32,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
 
                     <div class="row mb-3"  th:if="${(usuarioDireccion.Usuario.IdUsuario == 0 && usuarioDireccion.Direccion.IdDireccion == 0) || (usuarioDireccion.Usuario.IdUsuario != 0 && usuarioDireccion.Direccion.IdDireccion == -1)}">
                         <div class="col-md-4 text-center d-flex flex-column align-items-center">
-                            <div class="card p-3 w-100 h-100 "> 
+                            <div class="card p-3 w-100 h-100"> 
                                 <label for="imagenFile" class="form-label fw-bold">Imagen</label>
                                 <input type="file" class="form-control mb-2" name="imagenFile" id="imagenFile">
                                 <img id="previewImage" style="max-width: 300px; max-height: auto" class="mx-auto" th:src="${usuarioDireccion.Usuario.Imagen != null} ?

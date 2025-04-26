@@ -21,11 +21,11 @@
                             <br>
                             <form action="/Usuario/CargaMasiva" method="post" enctype="multipart/form-data">
                                 <div class="row"> 
-                                    <div class="col-md-12 mb-3"> 
-                                        <input type="file" id="archivo" name="archivo" accept=".xlsx,.txt">
+                                    <div class="col-md-10 mb-3"> 
+                                        <input class="form-control" type="file" id="archivo" name="archivo" accept=".xlsx,.txt">
                                     </div>
-                                    <div class="col-md-12 mb-3"> 
-                                        <button type="submit" class="btn btn-success" id="cargaMasiva">Subir Archivo</button>
+                                    <div class="col-md-2 mb-3"> 
+                                        <button type="submit" class="btn btn-outline-success" id="cargaMasiva"><i class="bi bi-file-earmark-arrow-up"></i>Subir Archivo</button>
                                     </div>
 
                                 </div>
@@ -77,16 +77,16 @@
                 document.getElementById("archivo").setAttribute("accept", ".xlsx");
 
                 document.getElementById("archivo").style.background = '#198754';
-                document.getElementById("cargaMasiva").classList.remove("btn-primary");
-                document.getElementById("cargaMasiva").classList.add("btn-success");
+                document.getElementById("cargaMasiva").classList.remove("btn-outline-primary");
+                document.getElementById("cargaMasiva").classList.add("btn-outline-success");
             });
             document.getElementById("buttonTxT").addEventListener("click", function () {
                 tipoArchivo = "txt";
                 document.getElementById("formularioArchivo").style.display = "block";
                 document.getElementById("archivo").setAttribute("accept", ".txt");
                 document.getElementById("archivo").style.background = '#0d6efd';
-                document.getElementById("cargaMasiva").classList.remove("btn-success");
-                document.getElementById("cargaMasiva").classList.add("btn-primary");
+                document.getElementById("cargaMasiva").classList.remove("btn-outline-success");
+                document.getElementById("cargaMasiva").classList.add("btn-outline-primary");
             });
             document.getElementById("archivo").addEventListener("change", function () {
                 if (this.files.length > 0) {

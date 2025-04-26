@@ -69,12 +69,13 @@ public class UsuarioController {
     public String Index(Model model) {
 
         Result result = usuarioDAOImplementation.GetAll();
+        Result resultJPA = usuarioDAOImplementation.GetAllJPA();
         Result resultRol = rolDAOImplementation.GetAll();
         Usuario usuarioBusqueda = new Usuario();
         usuarioBusqueda.Rol = new Rol();
         model.addAttribute("usuarioBusqueda", usuarioBusqueda);
         model.addAttribute("roles", resultRol.object);
-        model.addAttribute("listaUsuarios", result.objects);
+        model.addAttribute("listaUsuarios", resultJPA.objects);
 
         return "UsuarioIndex";
     }
@@ -381,7 +382,7 @@ public class UsuarioController {
     }
 
     @PostMapping("Form")
-    public String Form(@Valid @ModelAttribute UsuarioDireccion usuarioDireccion, BindingResult BindingResult, @RequestParam MultipartFile imagenFile, Model model) {
+    public String Form(@Valid @ModelAttribute UsuarioDireccion usuarioDireccion, BindingResult BindingResult, @RequestParam(required = false) MultipartFile imagenFile, Model model) {
 
 //        if (BindingResult.hasErrors()) {
 //
@@ -400,13 +401,14 @@ public class UsuarioController {
         }
 
         if (usuarioDireccion.Usuario.getIdUsuario() == 0) {
-            usuarioDAOImplementation.Add(usuarioDireccion);
+//            usuarioDAOImplementation.Add(usuarioDireccion);
+            usuarioDAOImplementation.AddJPA(usuarioDireccion);
             return "redirect:/Usuario/index";
         } else {
             if (usuarioDireccion.Direccion.getIdDireccion() == -1) {
-                usuarioDAOImplementation.UpdateUsuario(usuarioDireccion.Usuario);
+                usuarioDAOImplementation.UpdateUsuarioJPA(usuarioDireccion.Usuario);
             } else if (usuarioDireccion.Direccion.getIdDireccion() == 0) {
-                direccionDaOImplementation.AddDireccion(usuarioDireccion);
+                direccionDaOImplementation.AddDireccionJPA(usuarioDireccion);
                 System.out.println("Agregar dirección");
 
             } else {
