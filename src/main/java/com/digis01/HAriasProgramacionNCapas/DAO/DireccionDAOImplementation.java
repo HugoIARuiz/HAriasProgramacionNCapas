@@ -156,7 +156,7 @@ public class DireccionDAOImplementation implements IDireccionDAO {
             });
 
         } catch (Exception ex) {
-            
+
             result.correct = false;
             result.errorMessage = ex.getLocalizedMessage();
             result.ex = ex;
@@ -164,6 +164,7 @@ public class DireccionDAOImplementation implements IDireccionDAO {
 
         return result;
     }
+
     @Transactional
     @Override
     public Result AddDireccionJPA(UsuarioDireccion usuarioDireccion) {
@@ -178,14 +179,37 @@ public class DireccionDAOImplementation implements IDireccionDAO {
             direccionJPA.Usuario = new com.digis01.HAriasProgramacionNCapas.JPA.Usuario();
             direccionJPA.Usuario.setIdUsuario(usuarioDireccion.Usuario.getIdUsuario());
             entityManager.persist(direccionJPA);
-            
+
             result.correct = true;
-            
+
         } catch (Exception ex) {
             result.correct = false;
             result.errorMessage = ex.getLocalizedMessage();
             result.ex = ex;
         }
+        return result;
+    }
+
+    @Override
+    public Result UpdatedireccionJPA(Direccion direccion) {
+        Result result = new Result();
+        try {
+            com.digis01.HAriasProgramacionNCapas.JPA.Direccion direccionJPA = new com.digis01.HAriasProgramacionNCapas.JPA.Direccion();
+            direccionJPA = entityManager.find(com.digis01.HAriasProgramacionNCapas.JPA.Direccion.class, direccion.getIdDireccion());
+            direccionJPA.setCalle(direccion.getCalle());
+            direccionJPA.setNumeroInterior(direccion.getNumeroInterior());
+            direccionJPA.setNumeroExterior(direccion.getNumeroExterior());
+            direccionJPA.Colonia = new com.digis01.HAriasProgramacionNCapas.JPA.Colonia();
+            direccionJPA.Colonia.setIdColonia(direccion.Colonia.getIdColonia());
+            entityManager.merge(direccionJPA);
+            
+            result.correct = true;
+        } catch (Exception ex) {
+            result.correct = false;
+            result.errorMessage = ex.getLocalizedMessage();
+            result.ex = ex;
+        }
+
         return result;
     }
 

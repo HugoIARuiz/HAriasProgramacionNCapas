@@ -412,7 +412,7 @@ public class UsuarioController {
                 System.out.println("Agregar dirección");
 
             } else {
-                direccionDaOImplementation.UpdateDireccion(usuarioDireccion.Direccion);
+                direccionDaOImplementation.UpdatedireccionJPA(usuarioDireccion.Direccion);
                 System.out.println("Actualiza direccion");
             }
             return "redirect:/Usuario/Form/" + usuarioDireccion.Usuario.getIdUsuario();
