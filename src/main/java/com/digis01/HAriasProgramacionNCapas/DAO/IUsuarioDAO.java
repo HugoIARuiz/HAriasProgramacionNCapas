@@ -14,8 +14,9 @@ public interface IUsuarioDAO {
     Result DelateUsuario(int IdUsuario);
     Result UpdateStatusByIdUsuario(int IdUsuario, int Status);
     Result UsuarioGetAllDinamico(Usuario usuario);
+    
     Result GetAllJPA();
     Result AddJPA(UsuarioDireccion usuarioDireccion);
     Result UpdateUsuarioJPA(Usuario usuario);
-    
+    Result DireccionesByIdUsuarioJPA(int IdUsuario);
 }

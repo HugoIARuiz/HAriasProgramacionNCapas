@@ -573,7 +573,6 @@ public class UsuarioDAOImplementation implements IUsuarioDAO {
             usuarioJPA.Rol.setIdRol(usuarioDireccion.Usuario.Rol.getIdRol());
             usuarioJPA.setImagen(usuarioDireccion.Usuario.getImagen());
             usuarioJPA.setStatus(1);
-            
 
             entityManager.persist(usuarioJPA);
             //Inserción de la dirección
@@ -618,9 +617,6 @@ public class UsuarioDAOImplementation implements IUsuarioDAO {
             usuarioJPA.Rol.setIdRol(usuario.Rol.getIdRol());
             usuarioJPA.setImagen(usuario.getImagen());
             entityManager.merge(usuarioJPA);
-            
-            
-            
 
             result.correct = true;
         } catch (Exception ex) {
@@ -628,6 +624,54 @@ public class UsuarioDAOImplementation implements IUsuarioDAO {
             result.errorMessage = ex.getLocalizedMessage();
             result.ex = ex;
 
+        }
+
+        return result;
+    }
+
+    @Override
+    public Result DireccionesByIdUsuarioJPA(int IdUsuario) {
+        Result result = new Result();
+
+        try {
+            TypedQuery<com.digis01.HAriasProgramacionNCapas.JPA.Usuario> queryUsuarios = entityManager.createQuery("FROM Usuario WHERE IdUsuario = :idusuario", com.digis01.HAriasProgramacionNCapas.JPA.Usuario.class);
+            queryUsuarios.setParameter("idusuario", IdUsuario);
+            List<com.digis01.HAriasProgramacionNCapas.JPA.Usuario> listaUsuario = queryUsuarios.getResultList(); //Lista para un usuario?
+
+            result.objects = new ArrayList<>();
+            for (com.digis01.HAriasProgramacionNCapas.JPA.Usuario usuarioJPA : listaUsuario) {
+                UsuarioDireccion usuarioDireccion = new UsuarioDireccion();
+                usuarioDireccion.Usuario = new Usuario();
+                usuarioDireccion.Usuario.setIdUsuario(usuarioJPA.getIdUsuario());
+                usuarioDireccion.Usuario.setNombre(usuarioJPA.getNombre());
+                usuarioDireccion.Usuario.setApellidoPaterno(usuarioJPA.getApellidoPaterno());
+                usuarioDireccion.Usuario.setApellidoMaterno(usuarioJPA.getApellidoMaterno());
+                usuarioDireccion.Usuario.setUsername(usuarioJPA.getUsername());
+                usuarioDireccion.Usuario.setEmail(usuarioJPA.getEmail());
+                usuarioDireccion.Usuario.setImagen(usuarioJPA.getImagen());
+
+                TypedQuery<com.digis01.HAriasProgramacionNCapas.JPA.Direccion> queryDirecciones = entityManager.createQuery("FROM Direccion WHERE Usuario.IdUsuario = :idusuario", com.digis01.HAriasProgramacionNCapas.JPA.Direccion.class);
+                queryDirecciones.setParameter("idusuario", usuarioJPA.getIdUsuario());
+                List<com.digis01.HAriasProgramacionNCapas.JPA.Direccion> direccionesJPA = queryDirecciones.getResultList();
+                usuarioDireccion.Direcciones = new ArrayList<>();
+                for (com.digis01.HAriasProgramacionNCapas.JPA.Direccion direccionJPA : direccionesJPA) {
+                    Direccion direccion = new Direccion();
+                    direccion.setCalle(direccionJPA.getCalle());
+                    direccion.setNumeroInterior(direccionJPA.getNumeroInterior());
+                    direccion.setNumeroExterior(direccionJPA.getNumeroExterior());
+                    direccion.Colonia = new Colonia();
+                    direccion.Colonia.setIdColonia(direccionJPA.Colonia.getIdColonia());
+                    usuarioDireccion.Direcciones.add(direccion);
+                }
+                result.objects.add(usuarioDireccion);
+
+            }
+
+            result.correct = true;
+        } catch (Exception ex) {
+            result.correct = false;
+            result.errorMessage = ex.getLocalizedMessage();
+            result.ex = ex;
         }
 
         return result;

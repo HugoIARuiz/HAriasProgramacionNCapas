@@ -190,6 +190,7 @@ public class DireccionDAOImplementation implements IDireccionDAO {
         return result;
     }
 
+    @Transactional
     @Override
     public Result UpdatedireccionJPA(Direccion direccion) {
         Result result = new Result();

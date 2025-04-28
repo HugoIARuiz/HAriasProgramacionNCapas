@@ -70,11 +70,11 @@ public class UsuarioController {
 
         Result result = usuarioDAOImplementation.GetAll();
         Result resultJPA = usuarioDAOImplementation.GetAllJPA();
-        Result resultRol = rolDAOImplementation.GetAll();
+        Result resultRol = rolDAOImplementation.GetAllJPA();
         Usuario usuarioBusqueda = new Usuario();
         usuarioBusqueda.Rol = new Rol();
         model.addAttribute("usuarioBusqueda", usuarioBusqueda);
-        model.addAttribute("roles", resultRol.object);
+        model.addAttribute("roles", resultRol.objects);
         model.addAttribute("listaUsuarios", resultJPA.objects);
 
         return "UsuarioIndex";
@@ -308,7 +308,7 @@ public class UsuarioController {
             listaUsuarios = LecturaArchivoExcel(new File(absolutePath));
         }
         for(UsuarioDireccion usuarioDireccion: listaUsuarios){
-            usuarioDAOImplementation.Add(usuarioDireccion);
+            usuarioDAOImplementation.AddJPA(usuarioDireccion);
         }
         
         session.removeAttribute("urlFile");;
@@ -325,13 +325,13 @@ public class UsuarioController {
             usuarioDireccion.Direccion = new Direccion();
             usuarioDireccion.Direccion.Colonia = new Colonia();
 
-            model.addAttribute("roles", rolDAOImplementation.GetAll().object);
-            model.addAttribute("paises", paisDAOImplementation.GetAll().correct ? paisDAOImplementation.GetAll().object : null);
+            model.addAttribute("roles", rolDAOImplementation.GetAllJPA().objects);
+            model.addAttribute("paises", paisDAOImplementation.GetAllJPA().correct ? paisDAOImplementation.GetAllJPA().objects : null);
             model.addAttribute("usuarioDireccion", usuarioDireccion);
             return "UsuarioForm";
         } else {
-            Result result = usuarioDAOImplementation.DireccionesByIdUsuario(IdUsuario);
-            model.addAttribute("usuarioDirecciones", result.object);
+            Result result = usuarioDAOImplementation.DireccionesByIdUsuarioJPA(IdUsuario);
+            model.addAttribute("usuarioDireccion", result.objects);
             return "UsuarioDetail";
         }
 
@@ -348,7 +348,7 @@ public class UsuarioController {
             usuarioDireccion.Direccion = new Direccion();
             usuarioDireccion.Direccion.setIdDireccion(-1);
             model.addAttribute("usuarioDireccion", usuarioDireccion);
-            model.addAttribute("roles", rolDAOImplementation.GetAll().object);
+            model.addAttribute("roles", rolDAOImplementation.GetAllJPA().objects);
 
         } else if (IdDireccion == 0) {
             //Agregar Direccion
@@ -358,7 +358,7 @@ public class UsuarioController {
             usuarioDireccion.Direccion = new Direccion();
             usuarioDireccion.Direccion.setIdDireccion(0);
             model.addAttribute("usuarioDireccion", usuarioDireccion);
-            model.addAttribute("paises", paisDAOImplementation.GetAll().correct ? paisDAOImplementation.GetAll().object : null);
+            model.addAttribute("paises", paisDAOImplementation.GetAllJPA().correct ? paisDAOImplementation.GetAllJPA().objects : null);
 
         } else {
             // Editar dirección
@@ -370,12 +370,12 @@ public class UsuarioController {
             usuarioDireccion.Direccion = (Direccion) direccionDaOImplementation.GetByIdDireccion(IdDireccion).object;
 
             model.addAttribute("usuarioDireccion", usuarioDireccion);
-            model.addAttribute("paises", paisDAOImplementation.GetAll().correct ? paisDAOImplementation.GetAll().object : null);
-            Result estado = estadoDAOImplementation.EstadoByIdPais(usuarioDireccion.Direccion.Colonia.Municipio.Estado.Pais.getIdPais());
+            model.addAttribute("paises", paisDAOImplementation.GetAllJPA().correct ? paisDAOImplementation.GetAllJPA().objects : null);
+            Result estado = estadoDAOImplementation.EstadoByIdPaisJPA(usuarioDireccion.Direccion.Colonia.Municipio.Estado.Pais.getIdPais());
             model.addAttribute("estados", estado.objects);
-            Result municipio = municipioDAOImplementation.MunicipioByIdEstado(usuarioDireccion.Direccion.Colonia.Municipio.Estado.getIdEstado());
+            Result municipio = municipioDAOImplementation.MunicipioByIdEstadoJPA(usuarioDireccion.Direccion.Colonia.Municipio.Estado.getIdEstado());
             model.addAttribute("municipios", municipio.objects);
-            model.addAttribute("colonias", coloniaDAOImplementation.ColoniaByIdMunicipio(usuarioDireccion.Direccion.Colonia.Municipio.getIdMunicipio()).objects);
+            model.addAttribute("colonias", coloniaDAOImplementation.ColoniaByIdMunicipioJPA(usuarioDireccion.Direccion.Colonia.Municipio.getIdMunicipio()).objects);
 
         }
         return "UsuarioForm";
@@ -423,7 +423,7 @@ public class UsuarioController {
     @GetMapping("EstadoByIdPais/{IdPais}")
     @ResponseBody
     public Result EstadoByIdPais(@PathVariable int IdPais) {
-        Result result = estadoDAOImplementation.EstadoByIdPais(IdPais);
+        Result result = estadoDAOImplementation.EstadoByIdPaisJPA(IdPais);
 
         return result;
     }
@@ -431,7 +431,7 @@ public class UsuarioController {
     @GetMapping("MunicipioByIdEstado/{IdEstado}")
     @ResponseBody
     public Result MunicipioByIdEstado(@PathVariable int IdEstado) {
-        Result result = municipioDAOImplementation.MunicipioByIdEstado(IdEstado);
+        Result result = municipioDAOImplementation.MunicipioByIdEstadoJPA(IdEstado);
 
         return result;
     }
@@ -439,7 +439,7 @@ public class UsuarioController {
     @GetMapping("ColoniaByIdMunicipio/{IdMunicipio}")
     @ResponseBody
     public Result ColoniaByIdMunicipio(@PathVariable int IdMunicipio) {
-        Result result = coloniaDAOImplementation.ColoniaByIdMunicipio(IdMunicipio);
+        Result result = coloniaDAOImplementation.ColoniaByIdMunicipioJPA(IdMunicipio);
 
         return result;
     }

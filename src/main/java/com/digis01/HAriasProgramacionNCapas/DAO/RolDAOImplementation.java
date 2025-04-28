@@ -2,6 +2,8 @@ package com.digis01.HAriasProgramacionNCapas.DAO;
 
 import com.digis01.HAriasProgramacionNCapas.ML.Result;
 import com.digis01.HAriasProgramacionNCapas.ML.Rol;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import java.sql.ResultSet;
 import java.sql.Types;
 import java.util.ArrayList;
@@ -16,6 +18,8 @@ public class RolDAOImplementation implements IRolDAO {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private EntityManager entityManager;
 
     @Override
     public Result GetAll() {
@@ -45,6 +49,32 @@ public class RolDAOImplementation implements IRolDAO {
         }
         
         return result;
+    }
+
+    @Override
+    public Result GetAllJPA() {
+    Result result = new Result();
+    
+        try {
+            TypedQuery<com.digis01.HAriasProgramacionNCapas.JPA.Rol> queryRoles = entityManager.createQuery("FROM Rol", com.digis01.HAriasProgramacionNCapas.JPA.Rol.class);
+            List<com.digis01.HAriasProgramacionNCapas.JPA.Rol> rolesJPA = queryRoles.getResultList();
+            result.objects = new ArrayList<>();
+            for (com.digis01.HAriasProgramacionNCapas.JPA.Rol rolJPA : rolesJPA) {
+                Rol rol = new Rol();
+                rol.setIdRol(rolJPA.getIdRol());
+                rol.setNombre(rolJPA.getNombre());
+                result.objects.add(rol);
+                
+            }
+            
+            result.correct = true;
+        } catch (Exception ex) {
+            result.correct = false;
+            result.errorMessage = ex.getLocalizedMessage();
+            result.ex = ex;
+        }
+    
+    return result;
     }
 
 }

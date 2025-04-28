@@ -57,8 +57,16 @@ public class PaisDAOImplementation implements IPaisDAO {
     public Result GetAllJPA() {
         Result result = new Result();
         try {
-            TypedQuery<com.digis01.HAriasProgramacionNCapas.JPA.Pais> queryPais = entityManager.createQuery("FROM PAIS", com.digis01.HAriasProgramacionNCapas.JPA.Pais.class);
-            
+            TypedQuery<com.digis01.HAriasProgramacionNCapas.JPA.Pais> queryPaises = entityManager.createQuery("FROM Pais", com.digis01.HAriasProgramacionNCapas.JPA.Pais.class);
+            List<com.digis01.HAriasProgramacionNCapas.JPA.Pais> paisesJPA = queryPaises.getResultList();
+            result.objects = new ArrayList<>();
+            for (com.digis01.HAriasProgramacionNCapas.JPA.Pais paisJPA : paisesJPA){
+                Pais pais = new Pais();
+                pais.setIdPais(paisJPA.getIdPais());
+                pais.setNombre(paisJPA.getNombre());
+                result.objects.add(pais);
+            }
+            result.correct = true;
         } catch (Exception ex) {
             result.correct = false;
             result.errorMessage = ex.getLocalizedMessage();

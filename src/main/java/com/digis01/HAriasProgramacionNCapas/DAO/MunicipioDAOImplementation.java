@@ -2,9 +2,12 @@ package com.digis01.HAriasProgramacionNCapas.DAO;
 
 import com.digis01.HAriasProgramacionNCapas.ML.Municipio;
 import com.digis01.HAriasProgramacionNCapas.ML.Result;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import java.sql.ResultSet;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.CallableStatementCallback;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -15,6 +18,8 @@ public class MunicipioDAOImplementation implements IMunicipioDAO {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private EntityManager entityManager;
 
     @Override
     public Result MunicipioByIdEstado(int IdEstado) {
@@ -47,6 +52,32 @@ public class MunicipioDAOImplementation implements IMunicipioDAO {
             result.ex = ex;
         }
 
+        return result;
+    }
+
+    @Override
+    public Result MunicipioByIdEstadoJPA(int IdEstado) {
+        Result result = new Result();
+        try {
+            TypedQuery<com.digis01.HAriasProgramacionNCapas.JPA.Municipio> queryMunicipios = entityManager.createQuery("FROM Municipio WHERE Estado.IdEstado = :idestado", com.digis01.HAriasProgramacionNCapas.JPA.Municipio.class);
+            queryMunicipios.setParameter("idestado", IdEstado);
+            List<com.digis01.HAriasProgramacionNCapas.JPA.Municipio> municipiosJPA = queryMunicipios.getResultList();
+            result.objects = new ArrayList<>();
+            for (com.digis01.HAriasProgramacionNCapas.JPA.Municipio municipioJPA : municipiosJPA) {
+                Municipio municipio = new Municipio();
+                municipio.setIdMunicipio(municipioJPA.getIdMunicipio());
+                municipio.setNombre(municipioJPA.getNombre());
+                result.objects.add(municipio);
+                
+            }
+            
+            result.correct = true;
+        } catch (Exception ex) {
+            result.correct = false;
+            result.errorMessage = ex.getLocalizedMessage();
+            result.ex = ex;
+        }
+        
         return result;
     }
 
