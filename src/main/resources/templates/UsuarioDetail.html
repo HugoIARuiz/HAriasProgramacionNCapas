@@ -19,12 +19,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
             <div class="row">
                 <div class="col-md-4">
                     <div class="card border-primary">
-                        <img id="previewImage" style="max-width: 300px; max-height: auto" class="mx-auto mt-5 card-img-top" th:src="${usuarioDireccion.Usuario.Imagen != null} ?
-                                 'data:image/png;base64,' + ${usuarioDireccion.Usuario.Imagen} :
+                        <img id="previewImage" style="max-width: 300px; max-height: auto" class="mx-auto mt-5 card-img-top" th:src="${usuarioDirecciones.Usuario.Imagen != null} ?
+                                 'data:image/png;base64,' + ${usuarioDirecciones.Usuario.Imagen} :
                                  'https://static-00.iconduck.com/assets.00/profile-default-icon-2048x2045-u3j7s5nj.png'" />
                         <div class="card-body">
                             
-                            <!--usuarioDirecciones no es una lista aquí, es un único modelo, si fuera lista tendrías que hacer un th:each o acceder con índice usuarioDirecciones[0].Usuario.Direccion-->
+                             <!--usuarioDirecciones no es una lista aquí, es un único modelo, si fuera lista tendrías que hacer un th:each o acceder como usuarioDirecciones[0].Usuario-->
                             <h3 th:text="${usuarioDirecciones.Usuario.ApellidoMaterno != Null} ? 'Hola, '+${usuarioDirecciones.Usuario.Nombre} + ' ' +${usuarioDirecciones.Usuario.ApellidoPaterno}+' ' +${usuarioDirecciones.Usuario.ApellidoMaterno} : ${usuarioDirecciones.Usuario.Nombre} + ' ' +${usuarioDirecciones.Usuario.ApellidoPaterno}"></h3>
                             <p class="bi bi-person-fill" th:text="'  Usuario: '+${usuarioDirecciones.Usuario.Username}"></p>
                             <p class="bi bi-envelope-at" th:text="'  Email: '+${usuarioDirecciones.Usuario.Email}"></p>

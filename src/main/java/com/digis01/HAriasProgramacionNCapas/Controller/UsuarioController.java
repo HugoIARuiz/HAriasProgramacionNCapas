@@ -331,7 +331,7 @@ public class UsuarioController {
             return "UsuarioForm";
         } else {
             Result result = usuarioDAOImplementation.DireccionesByIdUsuarioJPA(IdUsuario);
-            model.addAttribute("usuarioDireccion", result.objects);
+            model.addAttribute("usuarioDirecciones", result.object);
             return "UsuarioDetail";
         }
 
@@ -342,7 +342,7 @@ public class UsuarioController {
         if (IdDireccion == null) {
             //Editar usuario
             UsuarioDireccion usuarioDireccion = new UsuarioDireccion();
-            usuarioDireccion = (UsuarioDireccion) usuarioDAOImplementation.UsuarioById(IdUsuario).object;
+            usuarioDireccion = (UsuarioDireccion) usuarioDAOImplementation.UsuarioByIdJPA(IdUsuario).object;
 //            usuarioDireccion.Usuario = new Usuario();
 //            usuarioDireccion.Usuario.setIdUsuario(IdUsuario);
             usuarioDireccion.Direccion = new Direccion();
