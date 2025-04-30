@@ -654,6 +654,7 @@ public class UsuarioDAOImplementation implements IUsuarioDAO {
             usuarioDireccion.Direcciones = new ArrayList<>();
             for (com.digis01.HAriasProgramacionNCapas.JPA.Direccion direccionJPA : direccionesJPA) {
                 Direccion direccion = new Direccion();
+                direccion.setIdDireccion(direccionJPA.getIdDireccion());
                 direccion.setCalle(direccionJPA.getCalle());
                 direccion.setNumeroInterior(direccionJPA.getNumeroInterior());
                 direccion.setNumeroExterior(direccionJPA.getNumeroExterior());
@@ -692,6 +693,8 @@ public class UsuarioDAOImplementation implements IUsuarioDAO {
             queryUsusario.setParameter("idusuario", IdUsuario);
             com.digis01.HAriasProgramacionNCapas.JPA.Usuario usuarioJPA = queryUsusario.getSingleResult();
             UsuarioDireccion usuarioDireccion = new UsuarioDireccion();
+            usuarioDireccion.Usuario = new Usuario();
+            
             usuarioDireccion.Usuario.setIdUsuario(usuarioJPA.getIdUsuario());
             usuarioDireccion.Usuario.setNombre(usuarioJPA.getNombre());
             usuarioDireccion.Usuario.setApellidoPaterno(usuarioJPA.getApellidoPaterno());
@@ -718,6 +721,39 @@ public class UsuarioDAOImplementation implements IUsuarioDAO {
         }
 
         return result;
+    }
+
+    @Transactional
+    @Override
+    public Result DelateUsuarioJPA(int IdUsuario) {
+        Result result = new Result();
+        try {
+            com.digis01.HAriasProgramacionNCapas.JPA.Usuario usuarioJPA = new com.digis01.HAriasProgramacionNCapas.JPA.Usuario();
+            
+            TypedQuery<com.digis01.HAriasProgramacionNCapas.JPA.Direccion> queryDirecciones = entityManager.createQuery("FROM Direccion WHERE Usuario.IdUsuario = :idusuario", com.digis01.HAriasProgramacionNCapas.JPA.Direccion.class);
+            queryDirecciones.setParameter("idusuario", IdUsuario);
+            List<com.digis01.HAriasProgramacionNCapas.JPA.Direccion> direccionesJPA = queryDirecciones.getResultList();
+            for (com.digis01.HAriasProgramacionNCapas.JPA.Direccion direccionJPA : direccionesJPA) {
+                entityManager.remove(direccionJPA);
+                
+            }
+            usuarioJPA = entityManager.find(com.digis01.HAriasProgramacionNCapas.JPA.Usuario.class, IdUsuario);
+            entityManager.remove(usuarioJPA);;
+            result.correct = true;
+        } catch (Exception ex) {
+            result.correct = false;
+            result.errorMessage = ex.getLocalizedMessage();
+            result.ex = ex;
+        }
+        
+        return result;
+    }
+
+    @Override
+    public Result UsuarioGetAllDinamicoJPA(Usuario usuario) {
+    Result result = new Result();
+    
+    return result;
     }
 
 }

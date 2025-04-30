@@ -164,13 +164,7 @@ public class Usuario {
         this.Status = Status;
     }
 
-    public Rol getRol() {
-        return Rol;
-    }
-
-    public void setRol(Rol Rol) {
-        this.Rol = Rol;
-    }
+    
 
     public Usuario() {
     }

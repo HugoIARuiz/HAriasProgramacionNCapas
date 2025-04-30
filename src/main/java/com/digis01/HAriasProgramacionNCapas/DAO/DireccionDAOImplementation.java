@@ -8,6 +8,7 @@ import com.digis01.HAriasProgramacionNCapas.ML.Pais;
 import com.digis01.HAriasProgramacionNCapas.ML.Result;
 import com.digis01.HAriasProgramacionNCapas.ML.UsuarioDireccion;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 import java.sql.ResultSet;
 import java.sql.Types;
@@ -211,6 +212,67 @@ public class DireccionDAOImplementation implements IDireccionDAO {
             result.ex = ex;
         }
 
+        return result;
+    }
+
+    @Override
+    public Result GetByIdDireccionJPA(int IdDireccion) {
+        Result result = new Result();
+        try {
+            TypedQuery<com.digis01.HAriasProgramacionNCapas.JPA.Direccion> queryDireccion = entityManager.createQuery("FROM Direccion WHERE IdDireccion = :iddireccion",com.digis01.HAriasProgramacionNCapas.JPA.Direccion.class);
+            queryDireccion.setParameter("iddireccion", IdDireccion);
+            com.digis01.HAriasProgramacionNCapas.JPA.Direccion direccionJPA = queryDireccion.getSingleResult();
+            Direccion direccion = new Direccion();
+            
+            direccion.setIdDireccion(direccionJPA.getIdDireccion());
+            direccion.setCalle(direccionJPA.getCalle());
+            direccion.setNumeroInterior(direccionJPA.getNumeroInterior());
+            direccion.setNumeroExterior(direccionJPA.getNumeroExterior());
+            direccion.Colonia = new Colonia();
+            direccion.Colonia.setIdColonia(direccionJPA.Colonia.getIdColonia());
+            direccion.Colonia.setNombre(direccionJPA.Colonia.getNombre());
+            direccion.Colonia.setCodigoPostal(direccionJPA.Colonia.getCodigoPostal());
+            direccion.Colonia.Municipio = new Municipio();
+            direccion.Colonia.Municipio.setIdMunicipio(direccionJPA.Colonia.Municipio.getIdMunicipio());
+            direccion.Colonia.Municipio.setNombre(direccionJPA.Colonia.Municipio.getNombre());
+            direccion.Colonia.Municipio.Estado = new Estado();
+            direccion.Colonia.Municipio.Estado.setIdEstado(direccionJPA.Colonia.Municipio.Estado.getIdEstado());
+            direccion.Colonia.Municipio.Estado.setNombre(direccionJPA.Colonia.Municipio.Estado.getNombre());
+            direccion.Colonia.Municipio.Estado.Pais = new Pais();
+            direccion.Colonia.Municipio.Estado.Pais.setIdPais(direccionJPA.Colonia.Municipio.Estado.Pais.getIdPais());
+            direccion.Colonia.Municipio.Estado.Pais.setNombre(direccionJPA.Colonia.Municipio.Estado.Pais.getNombre());
+            result.object = direccion;
+            
+            
+            result.correct = true;
+        } catch (Exception ex) {
+            
+            result.correct = false;
+            result.errorMessage = ex.getLocalizedMessage();
+            result.ex = ex;
+        }
+        
+        return result;
+    }
+
+    @Transactional
+    @Override
+    public Result DelateDireccionJPA(int IdDireccion) {
+        Result result = new Result();
+        try {
+            com.digis01.HAriasProgramacionNCapas.JPA.Direccion  direccion = new com.digis01.HAriasProgramacionNCapas.JPA.Direccion();
+            direccion = entityManager.find(com.digis01.HAriasProgramacionNCapas.JPA.Direccion.class, IdDireccion);
+            entityManager.remove(direccion);
+            
+            
+            result.correct = true;
+        } catch (Exception ex) {
+            
+            result.correct = false;
+            result.errorMessage = ex.getLocalizedMessage();
+            result.ex = ex;
+        }
+        
         return result;
     }
 

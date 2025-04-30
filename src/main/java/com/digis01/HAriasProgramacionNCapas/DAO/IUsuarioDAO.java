@@ -20,5 +20,7 @@ public interface IUsuarioDAO {
     Result DireccionesByIdUsuarioJPA(int IdUsuario);
     Result UsuarioByIdJPA(int IdUsuario);
     Result UpdateUsuarioJPA(Usuario usuario);
+    Result DelateUsuarioJPA(int IdUsuario);
+    Result UsuarioGetAllDinamicoJPA(Usuario usuario);
     
 }

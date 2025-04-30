@@ -367,7 +367,7 @@ public class UsuarioController {
             usuarioDireccion.Usuario.setIdUsuario(IdUsuario);
             usuarioDireccion.Direccion = new Direccion();
             usuarioDireccion.Direccion.setIdDireccion(IdDireccion);
-            usuarioDireccion.Direccion = (Direccion) direccionDaOImplementation.GetByIdDireccion(IdDireccion).object;
+            usuarioDireccion.Direccion = (Direccion) direccionDaOImplementation.GetByIdDireccionJPA(IdDireccion).object;
 
             model.addAttribute("usuarioDireccion", usuarioDireccion);
             model.addAttribute("paises", paisDAOImplementation.GetAllJPA().correct ? paisDAOImplementation.GetAllJPA().objects : null);
@@ -446,13 +446,13 @@ public class UsuarioController {
 
     @GetMapping("/DelateDireccion")
     public String DelateDireccion(@RequestParam int IdDireccion) {
-        direccionDaOImplementation.DelateDireccion(IdDireccion);
+        direccionDaOImplementation.DelateDireccionJPA(IdDireccion);
         return "redirect:/Usuario/index";
     }
 
     @GetMapping("/DelateUsuario")
     public String DelateUsuario(@RequestParam int IdUsuario) {
-        usuarioDAOImplementation.DelateUsuario(IdUsuario);
+        usuarioDAOImplementation.DelateUsuarioJPA(IdUsuario);
         return "redirect:/Usuario/index";
     }
 

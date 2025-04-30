@@ -22,13 +22,7 @@ public Estado Estado;
         this.Nombre = Nombre;
     }
 
-    public Estado getEstado() {
-        return Estado;
-    }
-
-    public void setEstado(Estado Estado) {
-        this.Estado = Estado;
-    }
+    
 
   
 
