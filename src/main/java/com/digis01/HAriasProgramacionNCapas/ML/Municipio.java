@@ -22,6 +22,22 @@ public Estado Estado;
         this.Nombre = Nombre;
     }
 
+    public int getIdmunicipio() {
+        return Idmunicipio;
+    }
+
+    public void setIdmunicipio(int Idmunicipio) {
+        this.Idmunicipio = Idmunicipio;
+    }
+
+    public Estado getEstado() {
+        return Estado;
+    }
+
+    public void setEstado(Estado Estado) {
+        this.Estado = Estado;
+    }
+
     
 
   
